@@ -1,4 +1,4 @@
-"ID","RSU Code","SDU Billing Rates","Circle","GST State","ID (rsu_item)","Item (rsu_item)","Plan FAT (rsu_item)","Plan Fibre length (rsu_item)","Plan HP (rsu_item)"
+"ID","RSU Code","SDU Billing Rates","Circle","GST State","ID (Rsu Items)","Item (Rsu Items)","Plan FAT (Rsu Items)","Plan Fibre length (Rsu Items)","Plan HP (Rsu Items)"
 "","04O-0","","M&G","","","SER-FSDU-CFT-6F",142,0,2094
 "","","","","","","SER-FSDU-CFT-12F",142,0,2094
 "","","","","","","SER-FSDU-CFT-24F",142,0,2094

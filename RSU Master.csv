@@ -1,32 +1,32 @@
 "ID","RSU Code","SDU Billing Rates","Circle","GST State","ID (Rsu Items)","Item (Rsu Items)","Plan FAT (Rsu Items)","Plan Fibre length (Rsu Items)","Plan HP (Rsu Items)"
-"IPS,1WB,SHT-0-M&G-11056","IPS,1WB,SHT-0","","M&G","","7mr18obcci","SER-FSDU-CFT-6F",262,0,4000
-"","","","","","7mr1dlvne8","SER-FSDU-CFT-12F",262,0,4000
-"","","","","","7mr1a4jq2t","SER-FSDU-CFT-24F",262,0,4000
-"","","","","","7mr18ag33s","SER-FSDU-CFT-48F",262,0,4000
-"S8P-0-M&G-11055","S8P-0","","M&G","","7mr1fso48a","SER-FSDU-CFT-6F",147,0,2462
-"","","","","","7mr1f055s2","SER-FSDU-CFT-12F",147,0,2462
-"","","","","","7mr1unt3o1","SER-FSDU-CFT-24F",147,0,2462
-"","","","","","7mr1m9d54r","SER-FSDU-CFT-48F",147,0,2462
-"S8O-0-M&G-11054","S8O-0","","M&G","","7mr1neo6fn","SER-FSDU-CFT-6F",182,0,3037
-"","","","","","7mr12ass6h","SER-FSDU-CFT-12F",182,0,3037
-"","","","","","7mr1dd8m92","SER-FSDU-CFT-24F",182,0,3037
-"","","","","","7mr1nn7uit","SER-FSDU-CFT-48F",182,0,3037
-"S6J-0-M&G-11053","S6J-0","","M&G","","7mr1f1jtl1","SER-FSDU-CFT-6F",136,0,1604
-"","","","","","7mr11egg0s","SER-FSDU-CFT-12F",136,0,1604
-"","","","","","7mr17do9ef","SER-FSDU-CFT-24F",136,0,1604
-"","","","","","7mr1pu4ed4","SER-FSDU-CFT-48F",136,0,1604
-"M0T-0-M&G-11052","M0T-0","","M&G","","7mr10910jh","SER-FSDU-CFT-6F",49,0,824
-"","","","","","7mr12dr0ij","SER-FSDU-CFT-12F",49,0,824
-"","","","","","7mr15ma2jv","SER-FSDU-CFT-24F",49,0,824
-"","","","","","7mr1ehtd9l","SER-FSDU-CFT-48F",49,0,824
-"K0E-0-M&G-11051","K0E-0","","M&G","","7mr1smssf2","SER-FSDU-CFT-6F",168,0,2508
-"","","","","","7mr1u654u4","SER-FSDU-CFT-12F",168,0,2508
-"","","","","","7mr1qrjltd","SER-FSDU-CFT-24F",168,0,2508
-"","","","","","7mr1vf0m7n","SER-FSDU-CFT-48F",168,0,2508
-"04O-0-M&G-11050","04O-0","","M&G","","7mr1h1b44s","SER-FSDU-CFT-6F",142,0,2094
-"","","","","","7mr13qa7to","SER-FSDU-CFT-12F",142,0,2094
-"","","","","","7mr1la875q","SER-FSDU-CFT-24F",142,0,2094
-"","","","","","7mr1sa3cbg","SER-FSDU-CFT-48F",142,0,2094
+"IPS,1WB,SHT-0-M&G-11063","IPS,1WB,SHT-0","M&G 1 Year Fix","M&G","","9pf3glmpom","SER-FSDU-CFT-6F",262,0,4000
+"","","","","","9pf3q9sfq5","SER-FSDU-CFT-12F",262,0,4000
+"","","","","","9pf3eim5od","SER-FSDU-CFT-24F",262,150000,4000
+"","","","","","9pf3o9cdgd","SER-FSDU-CFT-48F",262,0,4000
+"S8P-0-M&G-11062","S8P-0","M&G 1 Year Fix","M&G","","9pf3phv2ka","SER-FSDU-CFT-6F",147,0,2462
+"","","","","","9pf35uiero","SER-FSDU-CFT-12F",147,0,2462
+"","","","","","9pf3k8cjkb","SER-FSDU-CFT-24F",147,0,2462
+"","","","","","9pf3ms55gp","SER-FSDU-CFT-48F",147,0,2462
+"S8O-0-M&G-11061","S8O-0","M&G 1 Year Fix","M&G","","9pf3su4643","SER-FSDU-CFT-6F",182,0,3037
+"","","","","","9pf36d9o1i","SER-FSDU-CFT-12F",182,0,3037
+"","","","","","9pf3e9cgs6","SER-FSDU-CFT-24F",182,0,3037
+"","","","","","9pf3jhc3gq","SER-FSDU-CFT-48F",182,0,3037
+"S6J-0-M&G-11060","S6J-0","M&G 1 Year Fix","M&G","","9pf3gioufl","SER-FSDU-CFT-6F",136,0,1604
+"","","","","","9pf3sgslbq","SER-FSDU-CFT-12F",136,0,1604
+"","","","","","9pf3js7hvs","SER-FSDU-CFT-24F",136,0,1604
+"","","","","","9pf3ndm743","SER-FSDU-CFT-48F",136,0,1604
+"M0T-0-M&G-11059","M0T-0","M&G 1 Year Fix","M&G","","9pf2l6kiaq","SER-FSDU-CFT-6F",49,0,824
+"","","","","","9pf2q595m2","SER-FSDU-CFT-12F",49,0,824
+"","","","","","9pf2e9kcpg","SER-FSDU-CFT-24F",49,0,824
+"","","","","","9pf2jsiobo","SER-FSDU-CFT-48F",49,0,824
+"K0E-0-M&G-11058","K0E-0","M&G 1 Year Fix","M&G","","9pf2k4hfqj","SER-FSDU-CFT-6F",168,0,2508
+"","","","","","9pf2p6hchd","SER-FSDU-CFT-12F",168,0,2508
+"","","","","","9pf2asm9p3","SER-FSDU-CFT-24F",168,150000,2508
+"","","","","","9pf2qe2ctl","SER-FSDU-CFT-48F",168,0,2508
+"04O-0-M&G-11057","04O-0","M&G 1 Year Fix","M&G","","9pf2mdr8ip","SER-FSDU-CFT-6F",142,0,2094
+"","","","","","9pf24v1udj","SER-FSDU-CFT-12F",142,0,2094
+"","","","","","9pf27rrncp","SER-FSDU-CFT-24F",142,0,2094
+"","","","","","9pf2602am3","SER-FSDU-CFT-48F",142,0,2094
 "K38-0-KOL-11049","K38-0","KOL 1 Year Fix","KOL","","0k6ls1l0ka","SER-FSDU-CFT-6F",97,206652,1552
 "","","","","","akmffkv4cl","SER-FSDU-CFT-12F",97,128063,1552
 "","","","","","akmfcjamvg","SER-FSDU-CFT-24F",97,40342,1552
