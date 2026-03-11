@@ -8,6 +8,7 @@ and outputs rows in the same column structure as RSU Hoto.csv for ERPNext import
 from pathlib import Path
 import pandas as pd
 import os
+import re
 import requests
 from dotenv import load_dotenv
 
@@ -31,6 +32,26 @@ HOTO_COLUMNS = [
     "Hoto Item (Executed)",
     "Incremental Hoto(fibre length) (Executed)",
 ]
+
+
+def normalize_cluster_id(s: str) -> str:
+    """Remove all spaces from Cluster ID. E.g. 'gpe - 1-0' -> 'gpe-1-0'."""
+    return re.sub(r"\s+", "", str(s).strip()) if pd.notna(s) else ""
+
+
+def cluster_id_to_rsu_code(s: str) -> str:
+    """
+    Normalize and append -0 for RSU Code.
+
+    Examples:
+    - '0D3'        -> '0D3-0'
+    - '0D3-0'      -> '0D3-0'
+    - 'gpe - 1-0'  -> 'gpe-1-0'
+    """
+    norm = normalize_cluster_id(s)
+    if not norm:
+        return ""
+    return f"{norm}-0" if not norm.endswith("-0") else norm
 
 
 def load_hp() -> pd.DataFrame:
@@ -147,17 +168,16 @@ def build_hoto_rows(hp: pd.DataFrame) -> pd.DataFrame:
 
     Rules:
     - ID, RSU ID, ID (Executed) left blank
-    - RSU Code = Cluster ID
+    - RSU Code = normalized Cluster ID with -0 suffix (same logic as plan_hp_fat.py)
     - Executed HP (Executed) = Actual Home Pass
     - Executed FAT (Executed) = Actual Deployed FAT
     - Hoto Date  = HOTO Date
     - Hoto Item (Executed) = SER-FSDU-CFT-<Fibre Type>
     - Incremental Hoto(fibre length) (Executed) = Fibre Length as per HOTO
     """
-    # RSU Code is derived from Cluster ID (same format as existing data: e.g. "K38-0")
-    # From your RSU Master.csv sample the pattern is "<ClusterID>-0"
+    # RSU Code is derived from Cluster ID using the same normalization logic
     hp = hp.copy()
-    hp["RSU Code"] = hp["Cluster ID"].astype(str).str.strip() + "-0"
+    hp["RSU Code"] = hp["Cluster ID"].apply(cluster_id_to_rsu_code)
 
     # Pre-fetch RSU IDs from ERPNext based on RSU Code
     rsu_id_map = fetch_rsu_ids(hp["RSU Code"].unique())
