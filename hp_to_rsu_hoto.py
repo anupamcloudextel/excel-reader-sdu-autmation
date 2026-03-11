@@ -1,8 +1,8 @@
 """
-Build RSU Hoto CSV from HP.xlsx.
+Build RSU Hoto CSV from pune_data.xlsx (sheet "HP").
 
-Reads HP.xlsx (cluster HP/FAT/HOTO data), reshapes it, and outputs rows
-in the same column structure as RSU Hoto.csv, suitable for ERPNext import.
+Reads pune_data.xlsx sheet "HP" (cluster HP/FAT/HOTO data), reshapes it,
+and outputs rows in the same column structure as RSU Hoto.csv for ERPNext import.
 """
 
 from pathlib import Path
@@ -13,7 +13,8 @@ from dotenv import load_dotenv
 
 
 SCRIPT_DIR = Path(__file__).parent
-HP_XLSX = SCRIPT_DIR / "HP.xlsx"
+SOURCE_XLSX = SCRIPT_DIR / "pune_data.xlsx"
+HP_SHEET = "HP"
 
 # Output file: NEW file, do not touch existing RSU Hoto.csv
 OUTPUT_CSV = SCRIPT_DIR / "RSU Hoto Import from HP.csv"
@@ -33,35 +34,51 @@ HOTO_COLUMNS = [
 
 
 def load_hp() -> pd.DataFrame:
-    """Load HP.xlsx and return a cleaned DataFrame with proper column names."""
-    if not HP_XLSX.exists():
-        raise FileNotFoundError(f"{HP_XLSX} not found.")
+    """Load pune_data.xlsx sheet 'HP' and return a cleaned DataFrame."""
+    if not SOURCE_XLSX.exists():
+        raise FileNotFoundError(f"{SOURCE_XLSX} not found.")
 
-    raw = pd.read_excel(HP_XLSX, header=0)
+    raw = pd.read_excel(SOURCE_XLSX, sheet_name=HP_SHEET, header=None)
 
-    # First row contains the actual header names; remaining rows are data
-    header_row = raw.iloc[0]
-    hp = raw.iloc[1:].copy()
+    # Row 0 = section labels; Row 1 = actual column names; Row 2+ = data
+    header_row = raw.iloc[1].astype(str).str.strip()
+    hp = raw.iloc[2:].copy()
     hp.columns = header_row
+    # Keep first occurrence of each column to avoid duplicate names (DataFrame vs Series)
+    hp = hp.loc[:, ~hp.columns.duplicated()]
 
-    # Normalise column names we'll use
-    hp = hp.rename(
-        columns={
-            "Cluster ID": "Cluster ID",
-            "Fiber Type": "Fibre Type",
-            "HOTO Date": "HOTO Date",
-            "Fiber Length as per HOTO": "Fibre Length as per HOTO",
-            "Actual Home Pass": "Actual Home Pass",
-            "Actual Deployed FAT": "Actual Deployed FAT",
-        }
-    )
+    # Build rename map (handle columns with leading/trailing spaces)
+    def _col(name):
+        for c in hp.columns:
+            if str(c).strip() == name:
+                return c
+        return None
 
-    # Keep only rows that have a Cluster ID (drop any footer/blank lines)
-    hp = hp.dropna(subset=["Cluster ID"])
+    rename_map = {}
+    for old, new in [
+        ("Cluster ID", "Cluster ID"),
+        ("HOTO Date", "HOTO Date"),
+        ("Fiber Length as per HOTO", "Fibre Length as per HOTO"),
+        ("Actual Home Pass", "Actual Home Pass"),
+        ("Actual Deployed FAT", "Actual Deployed FAT"),
+    ]:
+        c = _col(old)
+        if c is not None:
+            rename_map[c] = new
+    fibre_col = _col("Fiber Capacity") or _col("Fiber Type")
+    if fibre_col is not None:
+        rename_map[fibre_col] = "Fibre Type"
+    hp = hp.rename(columns=rename_map)
+
+    # Keep only rows that have Cluster ID and Fibre Type
+    hp = hp.dropna(subset=["Cluster ID", "Fibre Type"])
 
     # Ensure consistent types
     hp["Cluster ID"] = hp["Cluster ID"].astype(str).str.strip()
     hp["Fibre Type"] = hp["Fibre Type"].astype(str).str.strip()
+
+    # Drop rows where Fibre Type is "nan" (from pd.NA/NaN converted to string)
+    hp = hp[hp["Fibre Type"].str.lower() != "nan"]
 
     return hp
 
@@ -160,15 +177,18 @@ def build_hoto_rows(hp: pd.DataFrame) -> pd.DataFrame:
 
         for idx, row in group.reset_index(drop=True).iterrows():
             fibre_type = row["Fibre Type"]
+            if pd.isna(fibre_type) or str(fibre_type).strip().lower() in ("", "nan"):
+                continue
             fibre_length = row["Fibre Length as per HOTO"]
             actual_hp = row["Actual Home Pass"]
             actual_fat = row["Actual Deployed FAT"]
 
             hoto_item = f"SER-FSDU-CFT-{fibre_type}"
 
-            # Only first row of the group gets ID / RSU ID / RSU Code / Hoto Date
+            # Only first row of the group gets RSU ID / RSU Code / Hoto Date
+            # ID column is kept blank
             if idx == 0:
-                id_val = f"{cluster_id}-{hoto_date_out}" if hoto_date_out else ""
+                id_val = ""
                 rsu_id_val = rsu_id
                 rsu_code_val = rsu_code
                 hoto_date_val = hoto_date_out
