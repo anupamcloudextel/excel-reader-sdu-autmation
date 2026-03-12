@@ -1,23 +1,24 @@
 """
-Summarize PO length by OLT ID and Fiber Capacity from pune_data.xlsx (sheet "Route-Details").
+Summarize PO length by Cluster ID and Fiber Capacity from pune_data.xlsx.
 
-Output columns:
-- OLT ID
-- Fiber Capacity
-- PO length
+Reads Cluster ID, Fiber Capacity, and PO length from a specific sheet in pune_data.xlsx.
+Output columns: Cluster ID, Fiber Capacity, PO length.
 """
 
 from pathlib import Path
 import pandas as pd
 
 
+# --- Configuration: define source file, sheet, and columns ---
 SCRIPT_DIR = Path(__file__).parent
 SOURCE_XLSX = SCRIPT_DIR / "pune_data.xlsx"
-SHEET_NAME = "Route-Details"
+SHEET_NAME = "Route-Details"  # Specific sheet to read from pune_data.xlsx
+CLUSTER_ID_COL = "Cluster ID"
 OUTPUT_XLSX = SCRIPT_DIR / "OLT_PO_Length_Summary.xlsx"
 
 
 def load_route_details() -> pd.DataFrame:
+    """Load Cluster ID, Fiber Capacity, PO length from the defined sheet in pune_data.xlsx."""
     if not SOURCE_XLSX.exists():
         raise FileNotFoundError(f"{SOURCE_XLSX} not found.")
 
@@ -28,13 +29,14 @@ def load_route_details() -> pd.DataFrame:
     df = raw.iloc[2:].copy()
     df.columns = header
 
-    # Drop duplicate columns (can happen with merged headers)
-    df = df.loc[:, ~df.columns.duplicated()]
+    # Use LAST occurrence when duplicate column names exist (e.g. Cluster ID in column M
+    # vs an earlier duplicate from another section that may have values like "0BT")
+    df = df.loc[:, ~df.columns.duplicated(keep="last")].copy()
 
-    needed = ["OLT ID", "Fiber Capacity", "PO length"]
+    needed = [CLUSTER_ID_COL, "Fiber Capacity", "PO length"]
     missing = [c for c in needed if c not in df.columns]
     if missing:
-        raise KeyError(f"Missing columns in sheet '{SHEET_NAME}': {missing}")
+        raise KeyError(f"Missing columns in sheet '{SHEET_NAME}' of {SOURCE_XLSX.name}: {missing}")
 
     return df[needed].copy()
 
@@ -43,7 +45,7 @@ def main() -> None:
     df = load_route_details()
 
     # Clean values
-    df["OLT ID"] = df["OLT ID"].astype(str).str.strip()
+    df[CLUSTER_ID_COL] = df[CLUSTER_ID_COL].astype(str).str.strip()
     df["Fiber Capacity"] = df["Fiber Capacity"].astype(str).str.strip()
 
     # PO length numeric (keep NaN so we can detect empty groups)
@@ -60,14 +62,14 @@ def main() -> None:
         return "; ".join(str(v) for v in sorted(vals))
 
     summary = (
-        df.groupby(["OLT ID", "Fiber Capacity"], dropna=False, sort=True)["PO length"]
+        df.groupby([CLUSTER_ID_COL, "Fiber Capacity"], dropna=False, sort=True)["PO length"]
         .apply(_group_po_length)
         .reset_index()
     )
 
-    # Display "OLT ID" only once per group (like a merged-cell view)
-    summary = summary.sort_values(["OLT ID", "Fiber Capacity"], kind="stable").reset_index(drop=True)
-    summary.loc[summary["OLT ID"].duplicated(), "OLT ID"] = ""
+    # Display Cluster ID only once per group (like a merged-cell view)
+    summary = summary.sort_values([CLUSTER_ID_COL, "Fiber Capacity"], kind="stable").reset_index(drop=True)
+    summary.loc[summary[CLUSTER_ID_COL].duplicated(), CLUSTER_ID_COL] = ""
 
     # Write Excel
     summary.to_excel(OUTPUT_XLSX, index=False)

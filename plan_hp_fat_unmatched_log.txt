@@ -1,38 +1,19 @@
 plan_hp_fat.py - Unmatched Cluster IDs (not found in Site)
-Generated: 2026-03-11T18:33:37.009116
+Generated: 2026-03-12T17:34:54.159089
 Filters: Site custom_lob='FTTH SDU', custom_type='RSU Cluster'
 ------------------------------------------------------------
-  29B-2
-  2F2 -2
-  32E
-  3BZ - 1
-  3LM - 1
-  B3N - 1
-  C3K -2
-  CN3 -1
-  F02 -2
-  FNX
-  FNZ
-  G3R - 1
-  GA2 - 1
-  GAC
-  GBR - 2
-  GBR - 3
-  GKR -1
-  GKR -2
-  GOR - 1
-  GPE - 2
-  GPN - 1
-  H3N - 2
-  HA4 - 1
-  HK4 - 1
-  HV0 - 2
-  J0N - 1
-  J3D-2
-  J3J-2
-  NH0 - 1
-  NY4
-  P3E - 1
-  R2P - 1
+  ADG-TPT
+  ADK - 1
+  ADV-TPT
+  AFC-TPT
+  AFE-TPT
+  AFF-TPT
+  AFG-TPT
+  AFK-TPT
+  AGK-TPT
+  AJP-2 TPT
+  AJP-TPT
+  AKG-TPT
+  DBF
 
-Total unmatched: 32
+Total unmatched: 13
